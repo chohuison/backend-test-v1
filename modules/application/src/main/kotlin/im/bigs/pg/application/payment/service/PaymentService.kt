@@ -23,6 +23,8 @@ class PaymentService(
     private val feePolicyRepository: FeePolicyOutPort,
     private val paymentRepository: PaymentOutPort,
     private val pgClients: List<PgClientOutPort>,
+
+
 ) : PaymentUseCase {
     /**
      * 결제 승인/수수료 계산/저장을 순차적으로 수행합니다.
@@ -46,13 +48,26 @@ class PaymentService(
                 productName = command.productName,
             ),
         )
-        val hardcodedRate = java.math.BigDecimal("0.0300")
-        val hardcodedFixed = java.math.BigDecimal("100")
-        val (fee, net) = FeeCalculator.calculateFee(command.amount, hardcodedRate, hardcodedFixed)
+//        val hardcodedRate = java.math.BigDecimal("0.0300")
+//        val hardcodedFixed = java.math.BigDecimal("100")
+
+        //제휴사별 수수료 정책 조회 (승인 시점 기준)
+        val feePolicy = feePolicyRepository.findEffectivePolicy(
+            partnerId = partner.id,
+            at = approve.approvedAt
+        )?: throw IllegalStateException(
+            "No fee policy found for partner ${partner.id} at ${approve.approvedAt}"
+        )
+
+        //수수료 계산 (정책 기반)
+        val (fee, net) = FeeCalculator.calculateFee(command.amount,
+            feePolicy.percentage,
+            feePolicy.fixedFee)
+
         val payment = Payment(
             partnerId = partner.id,
             amount = command.amount,
-            appliedFeeRate = hardcodedRate,
+            appliedFeeRate = feePolicy.percentage,
             feeAmount = fee,
             netAmount = net,
             cardBin = command.cardBin,

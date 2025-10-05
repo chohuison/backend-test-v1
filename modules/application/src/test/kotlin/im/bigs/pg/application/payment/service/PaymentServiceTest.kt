@@ -22,7 +22,7 @@ import java.time.ZoneOffset
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class 결제서비스Test {
+class PaymentServiceTest {
     private val partnerRepo = mockk<PartnerOutPort>()
     private val feeRepo = mockk<FeePolicyOutPort>()
     private val paymentRepo = mockk<PaymentOutPort>()

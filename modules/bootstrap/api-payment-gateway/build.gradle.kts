@@ -1,3 +1,6 @@
+plugins {
+    kotlin("jvm")
+}
 tasks.jar {
     enabled = false
 }
@@ -19,4 +22,14 @@ dependencies {
     }
     testImplementation(libs.spring.mockk)
     testImplementation(libs.database.h2)
+
+    // Swagger/OpenAPI (springdoc)
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
+    implementation(kotlin("stdlib-jdk8"))
+}
+repositories {
+    mavenCentral()
+}
+kotlin {
+    jvmToolchain(8)
 }

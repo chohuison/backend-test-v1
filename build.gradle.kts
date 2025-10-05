@@ -6,6 +6,7 @@ plugins {
     kotlin("plugin.jpa") version "1.9.25"
     kotlin("kapt") version "1.9.25"
     id("org.jlleitschuh.gradle.ktlint") version "11.6.0"
+
 }
 
 // 프로젝트 전역 설정
