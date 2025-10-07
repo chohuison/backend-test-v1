@@ -10,5 +10,13 @@ data class CreatePaymentRequest(
     val cardBin: String? = null,
     val cardLast4: String? = null,
     val productName: String? = null,
-)
-
+) {
+    override fun toString(): String {
+        return "CreatePaymentRequest(" +
+                "partnerId=$partnerId, " +
+                "amount=$amount, " +
+                "cardBin=${if (cardBin != null) "****" else "null"}, " +
+                "cardLast4=${if (cardLast4 != null) "****" else "null"}, " +
+                "productName=$productName)"
+    }
+}
